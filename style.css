@@ -1,0 +1,263 @@
+/* Aesthetic: Pixel art / lo-fi retro — 8-bit color palette, chunky pixel fonts, intentional dithering, CRT scanlines */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0a0a0a;
+  --panel: #111111;
+  --border: #2a2a2a;
+  --green: #00ff41;
+  --amber: #ffb300;
+  --red: #ff3333;
+  --blue: #33aaff;
+  --white: #e8e8e8;
+  --dim: #444444;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+#app {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px 12px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#header {
+  text-align: center;
+  border: 2px solid var(--green);
+  padding: 12px 8px;
+  background: var(--panel);
+  image-rendering: pixelated;
+}
+
+#header h1 {
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 2px;
+  line-height: 1.6;
+  text-shadow: 0 0 10px var(--green);
+}
+
+#seed-display {
+  font-size: 8px;
+  color: var(--dim);
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+#seed-value {
+  color: var(--amber);
+}
+
+#stage {
+  position: relative;
+  border: 2px solid var(--border);
+  background: #050510;
+  line-height: 0;
+  overflow: hidden;
+}
+
+#stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.15) 2px,
+    rgba(0,0,0,0.15) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+#canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+#era-label {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  font-size: 7px;
+  color: var(--amber);
+  z-index: 20;
+  text-shadow: 1px 1px 0 #000;
+  letter-spacing: 1px;
+}
+
+#stats-bar {
+  display: flex;
+  justify-content: space-between;
+  border: 2px solid var(--border);
+  background: var(--panel);
+  padding: 10px 12px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-label {
+  font-size: 7px;
+  color: var(--dim);
+  letter-spacing: 1px;
+}
+
+.stat span:last-child {
+  font-size: 9px;
+  color: var(--green);
+}
+
+#stat-fate {
+  color: var(--amber) !important;
+}
+
+#loading-panel {
+  border: 2px solid var(--border);
+  background: var(--panel);
+  padding: 14px 12px;
+  text-align: center;
+}
+
+#loading-text {
+  font-size: 8px;
+  color: var(--dim);
+  animation: blink-cursor 1.2s step-end infinite;
+  line-height: 1.8;
+}
+
+#loading-text::after {
+  content: '_';
+  animation: blink-cursor 0.8s step-end infinite;
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+#verdict-panel {
+  border: 2px solid var(--amber);
+  background: var(--panel);
+  padding: 16px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#verdict-title {
+  font-size: 8px;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+
+#verdict-name {
+  font-size: 12px;
+  color: var(--amber);
+  line-height: 1.7;
+  text-shadow: 0 0 12px var(--amber);
+  letter-spacing: 1px;
+}
+
+#verdict-epitaph {
+  font-size: 8px;
+  color: var(--white);
+  line-height: 2;
+  border: 1px solid var(--border);
+  padding: 10px 8px;
+  font-family: 'Press Start 2P', monospace;
+}
+
+#verdict-stats {
+  font-size: 7px;
+  color: var(--dim);
+  line-height: 2.2;
+  text-align: left;
+}
+
+#share {
+  text-align: center;
+}
+
+#share button {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  background: #000;
+  color: var(--green);
+  border: 2px solid var(--green);
+  padding: 14px 20px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  line-height: 1.6;
+  min-height: 44px;
+  transition: background 0.1s, color 0.1s;
+  text-shadow: 0 0 6px var(--green);
+  box-shadow: 0 0 8px rgba(0,255,65,0.2);
+}
+
+#share button:hover {
+  background: var(--green);
+  color: #000;
+  text-shadow: none;
+}
+
+#share button:active {
+  transform: translateY(1px);
+}
+
+/* Verdict color variants */
+.verdict-triumph #verdict-name {
+  color: var(--green);
+  text-shadow: 0 0 12px var(--green);
+}
+
+.verdict-triumph #verdict-panel {
+  border-color: var(--green);
+}
+
+.verdict-collapse #verdict-name {
+  color: var(--red);
+  text-shadow: 0 0 12px var(--red);
+}
+
+.verdict-collapse #verdict-panel {
+  border-color: var(--red);
+}
+
+@media (max-width: 375px) {
+  #header h1 {
+    font-size: 9px;
+  }
+  #verdict-name {
+    font-size: 10px;
+  }
+}
